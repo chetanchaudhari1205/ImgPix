@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ImgPix</string>
+    <string name="yes">Yes please!</string>
+    <string name="no">Not now</string>
+    <string name="dialog_title">Hey there..</string>
+    <string name="dialog_description">Would you like to see some more details?</string>
+    <string name="menu_item_search">Search</string>
+</resources>

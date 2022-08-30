@@ -7,23 +7,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.payb.imgpix.R
 import com.payb.imgpix.databinding.ItemImageBinding
-import com.payb.imgpix.databinding.ItemTagBinding
-import com.payb.imgpix.framework.service.datamodels.Hit
 import com.payb.imgpix.framework.viewmodel.datamodels.HitModel
 
-
+/**
+ * The ImagesAdapter class to populate the items on the recycler view that are received from the ViewModel
+ */
 class ImagesAdapter(private val context: Context, private val fragment: Fragment) :
     RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
 
-    private val item: Int = 0
-    private val loading: Int = 1
+    private var listImages: MutableList<HitModel> = ArrayList()
 
-    var listImages: MutableList<HitModel> = ArrayList()
-
-    // Used to cache the views within the item layout for fast access
     inner class ViewHolder(val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,16 +25,29 @@ class ImagesAdapter(private val context: Context, private val fragment: Fragment
         return ViewHolder(binding)
     }
 
+    /**
+     * Method to get the [ItemImageBinding] that is used to achieve view binding for the UI components on the adapter
+     * @param parent the ViewGroup
+     * @return [ItemImageBinding]
+     */
     fun getItemImageBinding(parent: ViewGroup): ItemImageBinding {
         return ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
 
+    /**
+     * Method to add the list of [HitModel] received from the ViewModel to the list of HitModel on the adapter
+     * @param listHits the list of HitModel
+     */
     fun addAll(listHits: MutableList<HitModel>) {
         for (hit in listHits) {
             add(hit)
         }
     }
 
+    /**
+     * Method to add new [HitModel] to the list of HitModel one by one
+     * @param hit the HitModel to be added to the list
+     */
     private fun add(hit: HitModel) {
         listImages.add(hit)
         notifyItemInserted(listImages.size - 1)
@@ -51,14 +58,6 @@ class ImagesAdapter(private val context: Context, private val fragment: Fragment
 
         with(holder) {
             binding.userName.text = hit.user
-
-            /*Glide
-                .with(context)
-                .load(hit.previewURL)
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(binding.image)*/
-
             Glide.with(context).load(hit.previewURL).into(binding.image)
         }
 

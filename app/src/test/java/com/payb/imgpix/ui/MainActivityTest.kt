@@ -1,7 +1,6 @@
 package com.payb.imgpix.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.payb.imgpix.ImgPixApplication
 import com.payb.imgpix.di.component.AppComponent
@@ -15,6 +14,9 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.*
 
+/**
+ * MainActivityTest test class
+ */
 @RunWith(MockitoJUnitRunner::class)
 class MainActivityTest {
 
@@ -26,10 +28,13 @@ class MainActivityTest {
 
     @Mock
     lateinit var bundle: Bundle
+
     @Mock
     lateinit var imgPixComponent: ImgPixComponent
+
     @Mock
     lateinit var appComponent: AppComponent
+
     @Mock
     lateinit var imgPixApplication: ImgPixApplication
 

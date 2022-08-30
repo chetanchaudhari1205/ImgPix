@@ -44,54 +44,79 @@ class ListFragmentTest {
 
     @Mock
     private lateinit var detailFragment: DetailFragment
+
     @Mock
     lateinit var fragmentListBinding: FragmentListBinding
+
     @Mock
     lateinit var layoutInflater: LayoutInflater
+
     @Mock
     lateinit var container: ViewGroup
+
     @Mock
     lateinit var bundle: Bundle
+
     @Mock
     lateinit var rootView: ConstraintLayout
+
     @Mock
     lateinit var context: Context
+
     @Mock
     lateinit var mainActivity: MainActivity
+
     @Mock
     lateinit var imgPixComponent: ImgPixComponent
+
     @Mock
     lateinit var view: View
+
     @Mock
     lateinit var imgPixViewModel: ImgPixViewModel
+
     @Mock
     lateinit var imgPixModel: ImgPixModel
+
     @Mock
     lateinit var scheduler: Scheduler
+
     @Mock
     lateinit var imagesAdapter: ImagesAdapter
+
     @Mock
     lateinit var dialogPositiveOnClickListener: DialogInterface.OnClickListener
+
     @Mock
     lateinit var dialogNegativeOnClickListener: DialogInterface.OnClickListener
+
     @Mock
     lateinit var alertDialog: AlertDialog
+
     @Mock
     lateinit var dialogFactory: DialogFactory
+
     @Mock
     lateinit var hitModel: HitModel
+
     @Mock
     lateinit var fragmentManager: FragmentManager
+
     @Mock
     lateinit var fragmentTransaction: FragmentTransaction
+
     @Mock
     lateinit var menu: Menu
+
     @Mock
     lateinit var menuInflater: MenuInflater
+
     @Mock
     lateinit var menuItem: MenuItem
+
     @Mock
     lateinit var searchView: SearchView
+
     @Mock
     lateinit var searchQueryListener: SearchView.OnQueryTextListener
 
@@ -217,7 +242,7 @@ class ListFragmentTest {
         doReturn(context).whenever(listFragment).requireContext()
         doReturn("fruits").whenever(listFragment).encodeSearchQuery("fruits")
         doNothing().whenever(listFragment).subscribeToFetchImages("fruits", 1)
-        doNothing().whenever(listFragment).setBindingToRecylcerView()
+        doNothing().whenever(listFragment).setBindingToRecyclerView()
 
         val queryTextListener = listFragment.getOnQueryTextListener()
         Assert.assertTrue(queryTextListener.onQueryTextSubmit("fruits"))

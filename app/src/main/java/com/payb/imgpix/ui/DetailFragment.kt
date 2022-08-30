@@ -25,8 +25,6 @@ import com.payb.imgpix.ui.ListFragment.Companion.HIT_MODEL
 class DetailFragment : Fragment() {
 
     lateinit var binding: FragmentDetailBinding
-    //var binding get() = _binding!!
-    //private val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +35,13 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Method to get the [FragmentDetailBinding] for the DetailFragment
+     * @param inflater the layout inflater
+     * @param container the view group
+     * @param b whether to attach to the parent or not
+     * @return [FragmentDetailBinding]
+     */
     fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,12 +55,13 @@ class DetailFragment : Fragment() {
         initialiseUi()
     }
 
+    /**
+     * Method to initialise and populate the UI view components with the data received from the ViewModel
+     */
     fun initialiseUi() {
         val hitModel = arguments?.getSerializable(HIT_MODEL) as HitModel
-        //val hitModel = args.hitModel
         val requestManager = getGlideRequestManager()
         requestManager.load(hitModel.largeImageURL).into(binding.image)
-        //Glide.with(this).load(hitModel.largeImageURL).into(binding.image)
         val userTextView = binding.user
         userTextView.text = hitModel.user
         binding.likes.text = hitModel.likes.toString()
@@ -69,7 +75,11 @@ class DetailFragment : Fragment() {
         binding.recyclerViewTags.adapter = tagsAdapter
     }
 
-    fun getGlideRequestManager(): RequestManager {
+    /**
+     * Method to get the Request Manager instance for Glide
+     * [RequestManager]
+     */
+    private fun getGlideRequestManager(): RequestManager {
         return Glide.with(this)
     }
 

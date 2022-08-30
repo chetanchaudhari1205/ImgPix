@@ -18,6 +18,9 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.*
 
+/**
+ * DetailFragmentTest test class
+ */
 @RunWith(MockitoJUnitRunner::class)
 class DetailFragmentTest {
 
@@ -28,20 +31,28 @@ class DetailFragmentTest {
 
     @Mock
     lateinit var fragmentDetailBinding: FragmentDetailBinding
+
     @Mock
     lateinit var layoutInflater: LayoutInflater
+
     @Mock
     lateinit var container: ViewGroup
+
     @Mock
     lateinit var bundle: Bundle
+
     @Mock
     lateinit var rootView: RelativeLayout
+
     @Mock
     lateinit var context: Context
+
     @Mock
     lateinit var mainActivity: MainActivity
+
     @Mock
     lateinit var imgPixComponent: ImgPixComponent
+
     @Mock
     lateinit var view: View
 
@@ -76,13 +87,6 @@ class DetailFragmentTest {
 
     @Test
     fun testOnViewCreated() {
-        /*testOnCreateView()
-        doReturn(hitModel).whenever(bundle).getSerializable(HIT_MODEL)
-        doReturn(requestManager).whenever(detailFragment).getGlideRequestManager()
-        doReturn("largeImageURL").whenever(hitModel).largeImageURL
-        whenever(requestManager.load(hitModel.largeImageURL)).thenReturn(requestBuilderDrawable)
-        doReturn("user").whenever(hitModel).user
-        doReturn(userTextView).whenever(fragmentDetailBinding).user*/
         doNothing().whenever(detailFragment).initialiseUi()
         detailFragment.onViewCreated(view, bundle)
         verify(detailFragment, times(1)).initialiseUi()

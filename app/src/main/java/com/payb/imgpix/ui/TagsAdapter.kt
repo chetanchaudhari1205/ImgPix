@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.payb.imgpix.databinding.ItemTagBinding
 
-class TagsAdapter (private val listTags: List<String>): RecyclerView.Adapter<TagsAdapter.ViewHolder>() {
+/**
+ * The TagsAdapter class to populate the items on the recycler view that are received from the ViewModel
+ */
+class TagsAdapter(private val listTags: List<String>) :
+    RecyclerView.Adapter<TagsAdapter.ViewHolder>() {
 
     lateinit var binding: ItemTagBinding
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     inner class ViewHolder(val binding: ItemTagBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,6 +20,11 @@ class TagsAdapter (private val listTags: List<String>): RecyclerView.Adapter<Tag
         return ViewHolder(binding)
     }
 
+    /**
+     * Method to get the [ItemTagBinding] that is used to achieve view binding for the UI components on the adapter
+     * @param parent the ViewGroup
+     * @return [ItemTagBinding]
+     */
     fun getItemTagBinding(parent: ViewGroup): ItemTagBinding {
         return ItemTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
@@ -34,6 +41,5 @@ class TagsAdapter (private val listTags: List<String>): RecyclerView.Adapter<Tag
     override fun getItemCount(): Int {
         return listTags.size
     }
-
 
 }

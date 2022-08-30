@@ -58,6 +58,13 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Method to get the [FragmentListBinding] for the ListFragment
+     * @param inflater the layout inflater
+     * @param container the view group
+     * @param b whether to attach to the parent or not
+     * @return [FragmentListBinding]
+     */
     fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +80,9 @@ class ListFragment : Fragment() {
         subscribeToFetchImages(searchQuery, currentPage)
     }
 
+    /**
+     * Method to initialize and populate recycler view with the data received from the ViewModel
+     */
     fun initialiseRecyclerView() {
         adapter = ImagesAdapter(requireContext(), this)
         binding.recyclerViewImages.adapter = adapter
@@ -114,18 +124,20 @@ class ListFragment : Fragment() {
         inflater.inflate(R.menu.menu, menu)
         val searchItem = menu.findItem(R.id.search_bar)
         val searchView = searchItem.actionView as SearchView
-
         searchView.setOnQueryTextListener(getOnQueryTextListener())
-
     }
 
+    /**
+     * Method to get the on search query text listener instance to receive the events on query text submit
+     * @return [SearchView.OnQueryTextListener]
+     */
     fun getOnQueryTextListener(): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchQuery = query
                 currentPage = pageStart
                 adapter = ImagesAdapter(requireContext(), this@ListFragment)
-                setBindingToRecylcerView()
+                setBindingToRecyclerView()
                 subscribeToFetchImages(encodeSearchQuery(query), currentPage)
                 return true
             }
@@ -136,11 +148,16 @@ class ListFragment : Fragment() {
         }
     }
 
+    /**
+     * Method to URL encode the search query as required by the Pixabay API documentation
+     * @param query the search query
+     * @return URL encoded search string
+     */
     fun encodeSearchQuery(query: String): String {
         return URLEncoder.encode(query, "utf-8")
     }
 
-    fun setBindingToRecylcerView() {
+    fun setBindingToRecyclerView() {
         binding.recyclerViewImages.adapter = adapter
     }
 
@@ -149,22 +166,34 @@ class ListFragment : Fragment() {
         (activity as MainActivity).getActivityComponent().inject(this)
     }
 
+    /**
+     * Method to subscribe for fetching images from the Pixabay API
+     * @param searchString the search query
+     * @param page used for fetching the page wise response for pagination purpose
+     */
     @SuppressLint("CheckResult")
     fun subscribeToFetchImages(searchString: String, page: Int) {
         imgPixViewModel.fetchImages(searchString, page)
             .observeOn(getScheduler())
             .subscribe({
                 updateUI(it)
-                //Log.i(TAG, " Response : ${it.hits.get(0).user}")
             }, {
                 Log.e(TAG, " Exception : ${it.printStackTrace()}")
             })
     }
 
+    /**
+     * Method to fetch the Scheduler instance
+     * @return [Scheduler]
+     */
     fun getScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
     }
 
+    /**
+     * Method to update the UI view components with the data from the ViewModel
+     * @param imgPixModel [ImgPixModel]
+     */
     fun updateUI(imgPixModel: ImgPixModel) {
         totalPages = imgPixModel.totalHits
         if (currentPage > totalPages)
@@ -172,6 +201,10 @@ class ListFragment : Fragment() {
         adapter.addAll(imgPixModel.hits)
     }
 
+    /**
+     * Method to navigate to the [DetailFragment]
+     * @param hit [HitModel]
+     */
     private fun navigateToDetailFragment(hit: HitModel) {
         val detailFragment = getDetailFragmentInstance()
         val bundle = getBundleInstance()
@@ -180,19 +213,28 @@ class ListFragment : Fragment() {
         val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.nav_host_fragment, detailFragment).addToBackStack("backStack")
             .commit()
-
-        /*val action = ListFragmentDirections.actionListFragmentToDetailFragment(hit)
-        view?.findNavController()?.navigate(action)*/
     }
 
+    /**
+     * Method to get the bundle instance
+     * @return [Bundle]
+     */
     fun getBundleInstance(): Bundle {
         return Bundle()
     }
 
+    /**
+     * Method to get the [DetailFragment] instance
+     * @return DetailFragment
+     */
     fun getDetailFragmentInstance(): DetailFragment {
         return DetailFragment()
     }
 
+    /**
+     * Method to display the confirmation dialog
+     * @param hit [HitModel]
+     */
     fun displayConfirmationDialog(hit: HitModel) {
         alertDialog = dialogFactory.createAlertMaterialDialog(
             context,
@@ -209,6 +251,11 @@ class ListFragment : Fragment() {
         dialogFactory.showDialog(alertDialog)
     }
 
+    /**
+     * Method to get the positive button click listener instance
+     * @param hit [HitModel]
+     * @return [DialogInterface.OnClickListener]
+     */
     fun getYesButtonClickListener(hit: HitModel): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
             let {
@@ -218,6 +265,10 @@ class ListFragment : Fragment() {
         }
     }
 
+    /**
+     * Method to get the negative button click listener instance
+     * @return [DialogInterface.OnClickListener]
+     */
     fun getNoButtonClickListener(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
             let {

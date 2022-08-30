@@ -6,7 +6,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.payb.imgpix.databinding.ItemImageBinding
-import com.payb.imgpix.framework.service.datamodels.Hit
 import com.payb.imgpix.framework.viewmodel.datamodels.HitModel
 import org.junit.Assert
 import org.junit.Before
@@ -16,20 +15,32 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.*
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.whenever
 
+/**
+ * ImagesAdapterTest test class
+ */
 @RunWith(MockitoJUnitRunner::class)
 class ImagesAdapterTest {
 
     private lateinit var imagesAdapter: ImagesAdapter
+
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock private lateinit var context: Context
-    @Mock private lateinit var listFragment: Fragment
-    @Mock private lateinit var itemImageBinding: ItemImageBinding
-    @Mock private lateinit var viewGroup: ViewGroup
-    @Mock private lateinit var rootLayout: MaterialCardView
+    @Mock
+    private lateinit var context: Context
+    @Mock
+    private lateinit var listFragment: Fragment
+    @Mock
+    private lateinit var itemImageBinding: ItemImageBinding
+    @Mock
+    private lateinit var viewGroup: ViewGroup
+    @Mock
+    private lateinit var rootLayout: MaterialCardView
     private lateinit var listHits: MutableList<HitModel>
 
     @Before
@@ -78,4 +89,4 @@ class ImagesAdapterTest {
         imagesAdapter.addAll(listHits)
         Assert.assertEquals(2, listHits.size)
     }
- }
+}

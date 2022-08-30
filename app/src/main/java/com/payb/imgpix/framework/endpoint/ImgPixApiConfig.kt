@@ -41,7 +41,7 @@ class ImgPixApiConfig(private val context: Context) {
      * This method reads the .properties file
      * @return instance of properties with contains configurations of type [Properties]
      */
-    private fun readEnvironmentProperties(): Properties {
+    fun readEnvironmentProperties(): Properties {
         val properties = Properties()
         try {
             properties.load(context.assets.open(propertyFile))

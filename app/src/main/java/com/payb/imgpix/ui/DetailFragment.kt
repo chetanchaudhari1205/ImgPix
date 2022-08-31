@@ -2,13 +2,13 @@ package com.payb.imgpix.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.payb.imgpix.R
 import com.payb.imgpix.databinding.FragmentDetailBinding
 import com.payb.imgpix.framework.viewmodel.datamodels.HitModel
 import com.payb.imgpix.ui.ListFragment.Companion.HIT_MODEL
@@ -35,6 +35,12 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem? = menu.findItem(R.id.search_bar)
+        item?.isVisible = false
+    }
+
     /**
      * Method to get the [FragmentDetailBinding] for the DetailFragment
      * @param inflater the layout inflater
@@ -52,6 +58,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         initialiseUi()
     }
 
@@ -61,7 +68,10 @@ class DetailFragment : Fragment() {
     fun initialiseUi() {
         val hitModel = arguments?.getSerializable(HIT_MODEL) as HitModel
         val requestManager = getGlideRequestManager()
-        requestManager.load(hitModel.largeImageURL).into(binding.image)
+        requestManager.load(hitModel.largeImageURL)
+            .placeholder(R.drawable.ic_placeholder)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(binding.image)
         val userTextView = binding.user
         userTextView.text = hitModel.user
         binding.likes.text = hitModel.likes.toString()

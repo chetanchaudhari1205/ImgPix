@@ -2,11 +2,10 @@ package com.payb.imgpix.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.RelativeLayout
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.payb.imgpix.R
 import com.payb.imgpix.databinding.FragmentDetailBinding
 import com.payb.imgpix.di.component.ImgPixComponent
 import org.junit.Assert
@@ -56,6 +55,12 @@ class DetailFragmentTest {
     @Mock
     lateinit var view: View
 
+    @Mock
+    lateinit var menu: Menu
+
+    @Mock
+    lateinit var menuItem: MenuItem
+
     @Before
     fun setup() {
         detailFragment = spy(DetailFragment())
@@ -90,5 +95,20 @@ class DetailFragmentTest {
         doNothing().whenever(detailFragment).initialiseUi()
         detailFragment.onViewCreated(view, bundle)
         verify(detailFragment, times(1)).initialiseUi()
+    }
+
+    @Test
+    fun testOnPrepareOptionsMenu() {
+        doReturn(menuItem).whenever(menu).findItem(R.id.search_bar)
+        doReturn(false).whenever(menuItem).isVisible
+        detailFragment.onPrepareOptionsMenu(menu)
+        Assert.assertEquals(false, menuItem.isVisible)
+    }
+
+    @Test
+    fun testOnPrepareOptionsMenuNullMenuItem() {
+        doReturn(null).whenever(menu).findItem(R.id.search_bar)
+        detailFragment.onPrepareOptionsMenu(menu)
+        verify(menuItem, never()).isVisible = false
     }
 }

@@ -124,21 +124,29 @@ class ListFragment : Fragment() {
         inflater.inflate(R.menu.menu, menu)
         val searchItem = menu.findItem(R.id.search_bar)
         val searchView = searchItem.actionView as SearchView
-        searchView.setOnQueryTextListener(getOnQueryTextListener())
+        searchView.setOnQueryTextListener(getOnQueryTextListener(searchItem, searchView))
     }
 
     /**
      * Method to get the on search query text listener instance to receive the events on query text submit
+     * @param searchItem [MenuItem] search menu item
+     * @param searchView [SearchView] the view related to the search
      * @return [SearchView.OnQueryTextListener]
      */
-    fun getOnQueryTextListener(): SearchView.OnQueryTextListener {
+    fun getOnQueryTextListener(
+        searchItem: MenuItem,
+        searchView: SearchView
+    ): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                searchView.isIconified = true
+                searchView.clearFocus()
                 searchQuery = query
                 currentPage = pageStart
                 adapter = ImagesAdapter(requireContext(), this@ListFragment)
                 setBindingToRecyclerView()
                 subscribeToFetchImages(encodeSearchQuery(query), currentPage)
+                searchItem.collapseActionView()
                 return true
             }
 

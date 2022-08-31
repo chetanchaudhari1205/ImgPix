@@ -25,9 +25,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
-import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.*
 
@@ -117,8 +115,8 @@ class ListFragmentTest {
     @Mock
     lateinit var searchView: SearchView
 
-    @Mock
-    lateinit var searchQueryListener: SearchView.OnQueryTextListener
+    @Captor
+    lateinit var argumentCaptor: ArgumentCaptor<SearchView.OnQueryTextListener>
 
     @Before
     fun setup() {
@@ -244,18 +242,25 @@ class ListFragmentTest {
         doNothing().whenever(listFragment).subscribeToFetchImages("fruits", 1)
         doNothing().whenever(listFragment).setBindingToRecyclerView()
 
-        val queryTextListener = listFragment.getOnQueryTextListener()
+        val queryTextListener = listFragment.getOnQueryTextListener(menuItem, searchView)
         Assert.assertTrue(queryTextListener.onQueryTextSubmit("fruits"))
         verify(listFragment, times(2)).subscribeToFetchImages("fruits", 1)
     }
 
     @Test
     fun testOnCreateOptionsMenu() {
+        argumentCaptor = ArgumentCaptor.forClass(
+            SearchView.OnQueryTextListener::class.java
+        )
+        doNothing().whenever(searchView).setOnQueryTextListener(argumentCaptor.capture())
         doReturn(menuItem).whenever(menu).findItem(R.id.search_bar)
         doReturn(searchView).whenever(menuItem).actionView
-        doReturn(searchQueryListener).whenever(listFragment).getOnQueryTextListener()
+        doReturn(context).whenever(listFragment).requireContext()
+        doNothing().whenever(listFragment).setBindingToRecyclerView()
+        doNothing().whenever(listFragment).subscribeToFetchImages("fruits", 1)
 
         listFragment.onCreateOptionsMenu(menu, menuInflater)
-        verify(searchView, times(1)).setOnQueryTextListener(searchQueryListener)
+        argumentCaptor.value.onQueryTextSubmit("fruits")
+        verify(menuItem, times(1)).collapseActionView()
     }
 }
